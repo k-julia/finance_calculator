@@ -1,0 +1,38 @@
+<!DOCTYPE HTML>
+<html xmlns:th="https://www.thymeleaf.org">
+<head>
+    <title>Калькулятор</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <script type="text/javascript">
+        function replaceCommaWithDot(inputElement) {
+            inputElement.value = inputElement.value.replace(/,/g, '.');
+        }
+    </script>
+</head>
+<body>
+<h1>Калькулятор</h1>
+<h2>(Крапивина Юлия Игоревна, 4 курс, 4 группа, 2023 год)</h2>
+
+<form action="/" th:action="@{/}" th:object="${calculator}" method="post">
+    <p>Первое число:</p>
+    <p><label>
+        <input type="text" name="number" th:field="*{number1}" oninput="replaceCommaWithDot(this)"/>
+    </label></p>
+    <label>
+        <select th:field="*{operation}">
+            <option th:value="'+'" th:text="'+'"></option>
+            <option th:value="'-'" th:text="'-'"></option>
+        </select>
+    </label>
+    <p>Второе число:</p>
+    <label>
+        <input type="text" name="number" th:field="*{number2}" oninput="replaceCommaWithDot(this)"/>
+    </label>
+    <p><input type="submit" value="Вычислить" /></p>
+</form>
+
+<p>Результат:</p>
+<p th:text="${calculator.result}" />
+
+</body>
+</html>
