@@ -4,30 +4,52 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 
 @Getter
 @Setter
 public class Calculator {
-    private BigDecimal number1;
-    private BigDecimal number2;
+    private String number1;
+    private String number2;
     private String operation;
     private BigDecimal result;
 
-    public BigDecimal getResult(){
+    public String getResult(){
         if (operation == null) {
             return null;
         }
 
+        BigDecimal first = new BigDecimal(number1.replace(" ", ""));
+        BigDecimal second = new BigDecimal(number2.replace(" ", ""));
+
         switch (operation) {
             case "+" -> {
-                result = number1.add(number2);
+                result = first.add(second);
             }
             case "-" -> {
-                result = number1.subtract(number2);
+                result = first.subtract(second);
+            }
+            case "*" -> {
+                result = first.multiply(second);
+            }
+            case "/" -> {
+                result = first.divide(second, RoundingMode.HALF_UP);
             }
             default -> {
             }
         }
-        return result;
+
+        if (result == null) {
+            return "";
+        }
+
+        result = formatValue(result);
+        DecimalFormat formatter = new DecimalFormat("#,###.######");
+        return formatter.format(result).replace(",", ".");
+    }
+
+    private BigDecimal formatValue(BigDecimal bigDecimal) {
+        return bigDecimal.setScale(6, RoundingMode.HALF_UP).stripTrailingZeros();
     }
 }

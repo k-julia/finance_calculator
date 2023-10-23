@@ -1,11 +1,11 @@
 <!DOCTYPE HTML>
-<html>
+<html xmlns:th="https://www.thymeleaf.org">
 <head>
     <title>Калькулятор</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </head>
 <body>
-<h1>Ошибка ввода</h1>
+<h1 th:text="${error.message}"></h1>
 <button onclick="window.location.href='/';">Вернуться на главную</button>
 
 </body>
