@@ -14,27 +14,60 @@
 <h2>(Крапивина Юлия Игоревна, 4 курс, 4 группа, 2023 год)</h2>
 
 <form action="/" th:action="@{/}" th:object="${calculator}" method="post">
-    <p>Первое число:</p>
-    <p><label>
-        <input type="text" name="number" th:field="*{number1}" oninput="replaceCommaWithDot(this)"/>
-    </label></p>
     <label>
-        <select th:field="*{operation}">
+        <input type="text" name="number" th:value="0" th:field="*{number1}" oninput="replaceCommaWithDot(this)"/>
+    </label>
+    <label>
+        <select th:field="*{operation1}">
             <option th:value="'+'" th:text="'+'"></option>
             <option th:value="'-'" th:text="'-'"></option>
             <option th:value="'*'" th:text="'*'"></option>
             <option th:value="'/'" th:text="'/'"></option>
         </select>
     </label>
-    <p>Второе число:</p>
+    (
     <label>
-        <input type="text" name="number" th:field="*{number2}" oninput="replaceCommaWithDot(this)"/>
+        <input type="text" name="number" th:value="0" th:field="*{number2}" oninput="replaceCommaWithDot(this)"/>
     </label>
+    <label>
+        <select th:field="*{operation2}">
+            <option th:value="'+'" th:text="'+'"></option>
+            <option th:value="'-'" th:text="'-'"></option>
+            <option th:value="'*'" th:text="'*'"></option>
+            <option th:value="'/'" th:text="'/'"></option>
+        </select>
+    </label>
+    <label>
+        <input type="text" name="number" th:value="0" th:field="*{number3}" oninput="replaceCommaWithDot(this)"/>
+    </label>
+    )
+    <label>
+        <select th:field="*{operation3}">
+            <option selected="selected" th:value="'+'" th:text="'+'"></option>
+            <option th:value="'-'" th:text="'-'"></option>
+            <option th:value="'*'" th:text="'*'"></option>
+            <option th:value="'/'" th:text="'/'"></option>
+        </select>
+    </label>
+    <label>
+        <input type="text" name="number" th:value="0" th:field="*{number4}" oninput="replaceCommaWithDot(this)"/>
+    </label>
+    <p>Вид округления:
+        <label>
+            <select th:field="*{roundingStr}">
+                <option th:value="'математическое'" th:text="'математическое'"></option>
+                <option th:value="'бухгалтерское'" th:text="'бухгалтерское'"></option>
+                <option th:value="'усечение'" th:text="'усечение'"></option>
+            </select>
+        </label>
+    </p>
     <p><input type="submit" value="Вычислить" /></p>
 </form>
 
 <p>Результат:</p>
 <p th:text="${calculator.result}" />
+<p>Округленный до целых результат:</p>
+<p th:text="${calculator.roundedResult}" />
 
 </body>
 </html>

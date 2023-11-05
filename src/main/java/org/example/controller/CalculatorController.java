@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 @Controller
 public class CalculatorController {
@@ -23,18 +24,39 @@ public class CalculatorController {
     public String calculate(Model model, @ModelAttribute Calculator calculator, @ModelAttribute Error error) {
         model.addAttribute("calculator", calculator);
 
+        switch (calculator.getRoundingStr()) {
+            case "математическое" -> calculator.setResultRoundingMode(RoundingMode.HALF_UP);
+            case "бухгалтерское" -> {
+                calculator.setScale(0);
+                calculator.setResultRoundingMode(RoundingMode.HALF_EVEN);
+            }
+            case "усечение" -> {
+                calculator.setScale(0);
+                calculator.setResultRoundingMode(RoundingMode.DOWN);
+            }
+            default -> {
+            }
+        }
+
         String number1 = calculator.getNumber1();
         String number2 = calculator.getNumber2();
+        String number3 = calculator.getNumber3();
+        String number4 = calculator.getNumber4();
         BigDecimal first;
         BigDecimal second;
+        BigDecimal third;
+        BigDecimal forth;
 
         try {
             first = new BigDecimal(number1.replace(" ", ""));
             second = new BigDecimal(number2.replace(" ", ""));
+            third = new BigDecimal(number3.replace(" ", ""));
+            forth = new BigDecimal(number4.replace(" ", ""));
 
             if (isExponentialNotation(first) || isExponentialNotation(second) ||
-                !isValidStringFormat(number1) ||
-                    !isValidStringFormat(number2)) {
+                    isExponentialNotation(third) || isExponentialNotation(forth) ||
+                !isValidStringFormat(number1) || !isValidStringFormat(number2) ||
+                    !isValidStringFormat(number3) || !isValidStringFormat(number4)) {
                 throw new Exception();
             }
         } catch (Exception e) {
@@ -42,7 +64,11 @@ public class CalculatorController {
             return "error";
         }
 
-        if (("/".equals(calculator.getOperation()) && BigDecimal.ZERO.equals(second))) {
+        if (("/".equals(calculator.getOperation2()) && BigDecimal.ZERO.equals(third)) ||
+            ("/".equals(calculator.getOperation3()) && BigDecimal.ZERO.equals(forth)) ||
+            ("/".equals(calculator.getOperation1()) &&
+                calculator.getResultForTwoNumbers(number2, number3, calculator.getOperation2(),
+                        10, RoundingMode.HALF_UP).equals(BigDecimal.ZERO))) {
             model.addAttribute("error", new Error("Деление на 0 запрещено"));
             return "error";
         }
