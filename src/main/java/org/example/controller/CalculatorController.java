@@ -27,11 +27,9 @@ public class CalculatorController {
         switch (calculator.getRoundingStr()) {
             case "математическое" -> calculator.setResultRoundingMode(RoundingMode.HALF_UP);
             case "бухгалтерское" -> {
-                calculator.setScale(0);
                 calculator.setResultRoundingMode(RoundingMode.HALF_EVEN);
             }
             case "усечение" -> {
-                calculator.setScale(0);
                 calculator.setResultRoundingMode(RoundingMode.DOWN);
             }
             default -> {

@@ -25,7 +25,6 @@ public class Calculator {
     private String roundedResult;
     private String roundingStr;
     private RoundingMode resultRoundingMode;
-    private int scale = 6;
 
     public String getResult(){
         if (operation1 == null || operation2 == null || operation3 == null) {
@@ -35,10 +34,10 @@ public class Calculator {
         String res1 = getResultForTwoNumbers(number2, number3, operation2, 10, RoundingMode.HALF_UP).toPlainString();
         if (highPriorityOperations.contains(operation1) || !highPriorityOperations.contains(operation3)) {
             BigDecimal res2 = getResultForTwoNumbers(number1, res1, operation1, 10, RoundingMode.HALF_UP);
-            result = getResultForTwoNumbers(res2.toPlainString(), number4, operation3, scale, resultRoundingMode);
+            result = getResultForTwoNumbers(res2.toPlainString(), number4, operation3, 6, resultRoundingMode);
         } else {
             BigDecimal res2 = getResultForTwoNumbers(res1, number4, operation3, 10, RoundingMode.HALF_UP);
-            result = getResultForTwoNumbers(number1, res2.toPlainString(), operation1, scale, resultRoundingMode);
+            result = getResultForTwoNumbers(number1, res2.toPlainString(), operation1, 6, resultRoundingMode);
         }
 
         if (result == null) {
@@ -46,7 +45,8 @@ public class Calculator {
         }
 
         DecimalFormat formatter = new DecimalFormat("#,###.######");
-        roundedResult =  formatter.format(formatValue(result, 0, resultRoundingMode));
+        BigDecimal tmp = result;
+        roundedResult =  formatter.format(formatValue(tmp, 0, resultRoundingMode));
         return formatter.format(result).replace(",", ".");
     }
 
